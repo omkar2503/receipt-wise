@@ -1,0 +1,7 @@
+langchain-google-genai==2.0.8
+python-dotenv==1.0.1
+splitwise==3.0.0
+fastapi==0.104.0
+uvicorn==0.23.2
+python-multipart==0.0.6
+pillow==10.2.0
