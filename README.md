@@ -137,11 +137,3 @@ module.exports = nextConfig
 - Frontend can be deployed on Vercel, Netlify, or any Next.js-supported hosting
 - Ensure API URLs are correctly configured for production
 
-## Contributing
-
-See individual README files in the backend and frontend directories for specific contribution guidelines.
-
-## License
-
-This project is licensed under the MIT License. See LICENSE for details.
-"# receipt-wise" 
