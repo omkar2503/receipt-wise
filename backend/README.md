@@ -81,23 +81,20 @@ This automates receipt-based expense tracking and simplifies shared spending amo
 
 ## Configuration
 
-Create a file named `.env` in the project root:
+Create a file named `.env` in the backend directory:
 
 ```dotenv
-# .env
-# Splitwise API Credentials
-CONSUMER_SECRET=your_consumer_secret
-CONSUMER_KEY=your_consumer_key
-API_KEY=your_api_key
+# Splitwise API Key (required)
+SPLITWISE_API_KEY=your_splitwise_api_key
 
-# Google Gemini API Key
-GOOGLE_API_KEY=your_google_api_key
+# Google Gemini API Key (required)
+GOOGLE_API_KEY=your_google_gemini_api_key
 ```
 
-- **CONSUMER_SECRET, CONSUMER_KEY, API_KEY***: Your Splitwise API credentials & access token.  
-- **GOOGLE_API_KEY**: Key for calling Google's Gemini AI.   
-
-You can modify the group mapping in `splitwiseManager.py` if needed.
+**Important Notes:**
+- Ensure there are no extra spaces at the beginning of lines in the `.env` file
+- The backend must be restarted after changing environment variables
+- Use the provided start scripts for easier setup: `start_server.bat` or `start_server.ps1`
 
 ---
 
@@ -197,7 +194,14 @@ You can modify the group mapping in `splitwiseManager.py` if needed.
 
 1. **Start the server**  
    ```bash
+   # Method 1: Using environment variables directly
+   $env:SPLITWISE_API_KEY="your_api_key"
+   $env:GOOGLE_API_KEY="your_gemini_key"
    uvicorn main:app --reload
+   
+   # Method 2: Using the provided scripts
+   .\start_server.bat    # Windows
+   .\start_server.ps1    # PowerShell
    ```
 
 2. **Upload a receipt**  

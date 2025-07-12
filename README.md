@@ -97,6 +97,39 @@ pnpm dev
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Environment Variables Setup
+
+### Backend Environment Variables
+
+The backend requires the following environment variables to be set:
+
+```bash
+# In backend/.env file
+SPLITWISE_API_KEY=your_splitwise_api_key
+GOOGLE_API_KEY=your_google_gemini_api_key
+```
+
+**Important**: Make sure there are no extra spaces at the beginning of lines in the `.env` file.
+
+### Starting the Backend with Environment Variables
+
+```bash
+cd backend
+.\venv\Scripts\activate
+$env:SPLITWISE_API_KEY="your_api_key"
+$env:GOOGLE_API_KEY="your_gemini_key"
+uvicorn main:app --reload
+```
+
+Or use the provided scripts:
+```bash
+# Windows
+.\start_server.bat
+
+# PowerShell
+.\start_server.ps1
+```
+
 ## Development Workflow
 
 1. Make changes to backend (FastAPI)

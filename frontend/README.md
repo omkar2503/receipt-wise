@@ -140,10 +140,19 @@ SPLIT_API_BASE_URL=http://localhost:8000
 
 ## API Endpoints
 
-- **POST** `/api/search-products`  
-  Processes receipt images → returns extracted items.  
-- **POST** `/api/create-expense`  
-  Creates a new expense with split details.  
+The frontend includes the following API routes that proxy to the backend:
+
+- **GET** `/api/groups` - Fetches Splitwise groups
+- **GET** `/api/group-members` - Fetches members for a specific group
+- **POST** `/api/search-products` - Processes receipt images and extracts products
+- **POST** `/api/create-expense` - Creates expenses in Splitwise
+
+## Recent Improvements
+
+- ✅ Fixed group members fetching with proper error handling
+- ✅ Added loading states and better user feedback
+- ✅ Improved Expense Details section with member count display
+- ✅ Enhanced error handling for API failures  
 
 ---
 

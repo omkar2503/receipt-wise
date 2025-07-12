@@ -131,6 +131,7 @@ function ImageUploadSearch() {
   const [showHelp, setShowHelp] = useState(false)
   const [groups, setGroups] = useState<Record<string, Group>>(DEFAULT_GROUPS)
   const [isLoadingGroups, setIsLoadingGroups] = useState(false)
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false)
 
   // Function to filter out "Non-group expenses" from groups
   const filterGroups = useCallback((groupsData: Record<string, Group>) => {
@@ -284,12 +285,16 @@ function ImageUploadSearch() {
       const data = await response.json()
 
       if (data.success) {
-        // Update users from the API response
-        setUsers(data.users || [])
-
-        // Set default payer to the first user if not already set
-        if (!payer && data.users && data.users.length > 0) {
-          setPayer(data.users[0].id)
+        // Don't override users from the group members API
+        // The users should already be set from the group selection
+        // Only update if no users are currently set
+        if (!users || users.length === 0) {
+          setUsers(data.users || [])
+          
+          // Set default payer to the first user if not already set
+          if (!payer && data.users && data.users.length > 0) {
+            setPayer(data.users[0].id)
+          }
         }
 
         // Update products with empty shares
@@ -931,31 +936,53 @@ function ImageUploadSearch() {
   // Fetch group members when selectedGroup changes
   useEffect(() => {
     if (!selectedGroup) return;
+    
     const fetchMembers = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/group_members?group_id=${selectedGroup}`);
+        setIsLoadingMembers(true);
+        console.log(`Fetching members for group: ${selectedGroup}`);
+        const response = await fetch(`/api/group-members?group_id=${selectedGroup}`);
+        
         if (!response.ok) {
+          console.error(`Failed to fetch members: ${response.status} ${response.statusText}`);
           setUsers([]);
           return;
         }
+        
         const data = await response.json();
+        
+        if (!data.success) {
+          console.error("API returned error:", data.error);
+          setUsers([]);
+          return;
+        }
+        
         // Map members to the expected user format for the dropdown
-        const mappedUsers = (data.members || []).map((member: any) => ({
+        const mappedUsers = (data.members || []).map((member: any, index: number) => ({
           id: member.id.toString(),
-          name: `${member.first_name}${member.last_name ? ' ' + member.last_name : ''}`.trim(),
-          color: '#8888ff', // Default color, or you can assign based on member info
+          name: member.name || "Unknown User",
+          color: getColorForIndex(index), // Use consistent color assignment
         }));
+        
+        console.log(`Fetched ${mappedUsers.length} members:`, mappedUsers);
         setUsers(mappedUsers);
-        // Set default payer if not already set
-        if (!payer && mappedUsers.length > 0) {
-          setPayer(mappedUsers[0].id);
+        
+        // Set default payer if not already set or if current payer is not in the new group
+        if (!payer || !mappedUsers.find((u: User) => u.id === payer)) {
+          if (mappedUsers.length > 0) {
+            setPayer(mappedUsers[0].id);
+          }
         }
       } catch (err) {
+        console.error("Error fetching group members:", err);
         setUsers([]);
+      } finally {
+        setIsLoadingMembers(false);
       }
     };
+    
     fetchMembers();
-  }, [selectedGroup]);
+  }, [selectedGroup, payer]);
 
   return (
     <ErrorBoundary>
@@ -1212,7 +1239,7 @@ function ImageUploadSearch() {
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4 text-muted-foreground" />
                           <h2 className="text-sm font-semibold">
-                            People in {groups[selectedGroup]?.name || `#${selectedGroup}`}
+                            People in {groups[selectedGroup]?.name || `Group #${selectedGroup}`} ({users.length})
                           </h2>
                         </div>
 
@@ -1239,9 +1266,34 @@ function ImageUploadSearch() {
                         </div>
                       </div>
 
+                      {/* Loading state for users */}
+                      {isLoadingMembers && (
+                        <div className="flex items-center justify-center py-4 text-muted-foreground">
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          <span className="text-sm">Loading group members...</span>
+                        </div>
+                      )}
+
+                      {/* Error state for users */}
+                      {users.length === 0 && !isLoadingMembers && !selectedGroup && (
+                        <div className="flex items-center justify-center py-4 text-muted-foreground">
+                          <AlertCircle className="h-4 w-4 mr-2" />
+                          <span className="text-sm">Please select a group to see members</span>
+                        </div>
+                      )}
+
+                      {/* No members found state */}
+                      {users.length === 0 && !isLoadingMembers && selectedGroup && (
+                        <div className="flex items-center justify-center py-4 text-muted-foreground">
+                          <AlertCircle className="h-4 w-4 mr-2" />
+                          <span className="text-sm">No members found in this group</span>
+                        </div>
+                      )}
+
                       {/* User chips - responsive grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {users.map((user) => (
+                      {users.length > 0 && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {users.map((user) => (
                           <div key={user.id} className="relative group">
                             <div
                               className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm ${
@@ -1274,6 +1326,7 @@ function ImageUploadSearch() {
                           </div>
                         ))}
                       </div>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -1434,6 +1487,23 @@ function ImageUploadSearch() {
       </TooltipProvider>
     </ErrorBoundary>
   )
+}
+
+// Helper function to generate colors for users
+function getColorForIndex(index: number): string {
+  const colors = [
+    "#ef4444", // red
+    "#10b981", // green
+    "#8b5cf6", // purple
+    "#f97316", // orange
+    "#ec4899", // pink
+    "#6366f1", // indigo
+    "#14b8a6", // teal
+    "#f59e0b", // amber
+    "#06b6d4", // cyan
+    "#d946ef", // fuchsia
+  ]
+  return colors[index % colors.length]
 }
 
 export default function ImageUploadSearchWithErrorBoundary() {
