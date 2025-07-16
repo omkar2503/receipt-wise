@@ -65,7 +65,7 @@ export function EditableTotal({ subtotal, taxInfo, total, onUpdateTotal }: Edita
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <Label htmlFor="edit-subtotal" className="text-sm font-medium">
-              Subtotal ($)
+              Subtotal (₹)
             </Label>
             <Input
               id="edit-subtotal"
@@ -102,7 +102,7 @@ export function EditableTotal({ subtotal, taxInfo, total, onUpdateTotal }: Edita
 
           <div>
             <Label htmlFor="edit-total" className="text-sm font-medium">
-              Total ($)
+              Total (₹)
             </Label>
             <Input
               id="edit-total"
@@ -135,15 +135,15 @@ export function EditableTotal({ subtotal, taxInfo, total, onUpdateTotal }: Edita
       <div className="space-y-1">
         <div className="flex justify-between items-center min-w-[200px]">
           <span className="text-sm text-muted-foreground">Subtotal:</span>
-          <span className="font-medium">${subtotal}</span>
+          <span className="font-medium">₹{subtotal}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-sm text-muted-foreground">Tax ({(taxInfo.rate * 100).toFixed(1)}%):</span>
-          <span className="font-medium">${taxInfo.amount}</span>
+          <span className="font-medium">₹{taxInfo.amount}</span>
         </div>
         <div className="flex justify-between items-center border-t pt-1">
           <span className="font-medium">Total:</span>
-          <span className="font-bold text-lg">${total}</span>
+          <span className="font-bold text-lg">₹{total}</span>
         </div>
       </div>
 

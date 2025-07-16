@@ -103,26 +103,26 @@ function ProductCardComponent({
       }
 
       // Parse the input as a float
-      let dollarValue = Number.parseFloat(inputValue)
+      let rupeeValue = Number.parseFloat(inputValue)
 
       // Validate the input
-      if (isNaN(dollarValue)) {
+      if (isNaN(rupeeValue)) {
         return
       }
 
       // Get the product price
-      const price = Number.parseFloat(product.price.replace("$", ""))
+      const price = Number.parseFloat(product.price.replace("₹", ""))
 
-      // Ensure the dollar value doesn't exceed the product price
-      dollarValue = Math.max(0, Math.min(price, dollarValue))
+      // Ensure the rupee value doesn't exceed the product price
+      rupeeValue = Math.max(0, Math.min(price, rupeeValue))
 
-      // Convert dollar value to percentage
-      const percentage = (dollarValue / price) * 100
+      // Convert rupee value to percentage
+      const percentage = (rupeeValue / price) * 100
 
       // Update the share percentage
       updateSharePercentage(product.id, userId, percentage)
     } catch (error) {
-      console.error("Error handling dollar input:", error)
+      console.error("Error handling rupee input:", error)
     }
   }
 
@@ -144,7 +144,7 @@ function ProductCardComponent({
               </h3>
               {isEditingPrice ? (
                 <div className="flex items-center gap-1">
-                  <span className="text-sm">$</span>
+                  <span className="text-sm">₹</span>
                   <Input
                     type="number"
                     min="0"
@@ -173,7 +173,7 @@ function ProductCardComponent({
                   }}
                   title="Click to edit price"
                 >
-                  {product.price || "$0.00"}
+                  {product.price || "₹0.00"}
                 </p>
               )}
             </div>
@@ -286,7 +286,7 @@ function ProductCardComponent({
 
                 try {
                   // Calculate dollar amount for this user's share
-                  const price = Number.parseFloat(product.price.replace("$", ""))
+                  const price = Number.parseFloat(product.price.replace("₹", ""))
                   const userAmount = price * ((share.percentage || 0) / 100)
 
                   return (
@@ -297,7 +297,7 @@ function ProductCardComponent({
                           <span className="text-sm truncate">{user.name}</span>
                         </div>
                         <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                          <span className="text-xs sm:text-sm">$</span>
+                          <span className="text-xs sm:text-sm">₹</span>
                           <Input
                             type="number"
                             min="0"
@@ -344,13 +344,13 @@ function ProductCardComponent({
                   if (!user) return null
 
                   try {
-                    const price = Number.parseFloat(product.price.replace("$", ""))
+                    const price = Number.parseFloat(product.price.replace("₹", ""))
                     const userAmount = price * ((share.percentage || 0) / 100)
 
                     return (
                       <div key={share.userId} className="flex justify-between">
                         <span className="truncate mr-2">{user.name}:</span>
-                        <span>${userAmount.toFixed(2)}</span>
+                        <span>₹{userAmount.toFixed(2)}</span>
                       </div>
                     )
                   } catch (error) {

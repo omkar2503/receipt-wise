@@ -29,7 +29,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
   // Calculate total of all assigned items
   const calculateAssignedTotal = () => {
     return products.reduce((total, product) => {
-      const price = Number.parseFloat(product.price.replace("$", "")) || 0
+      const price = Number.parseFloat(product.price.replace("₹", "")) || 0
 
       // Only count items that are assigned (have shares)
       if (product.shares.length > 0) {
@@ -43,7 +43,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
   // Calculate total of unassigned items
   const calculateUnassignedTotal = () => {
     return products.reduce((total, product) => {
-      const price = Number.parseFloat(product.price.replace("$", "")) || 0
+      const price = Number.parseFloat(product.price.replace("₹", "")) || 0
 
       // Only count items that are NOT assigned (no shares)
       if (product.shares.length === 0) {
@@ -57,7 +57,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
   // Calculate total of all items (assigned + unassigned)
   const calculateAllItemsTotal = () => {
     return products.reduce((total, product) => {
-      const price = Number.parseFloat(product.price.replace("$", "")) || 0
+      const price = Number.parseFloat(product.price.replace("₹", "")) || 0
       return total + price
     }, 0)
   }
@@ -135,7 +135,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
             {/* Assigned Items */}
             <div className="p-3 bg-muted/10 rounded-lg">
               <div className="text-xs text-muted-foreground mb-1">Assigned Items</div>
-              <div className="font-bold text-lg">${assignedTotal.toFixed(2)}</div>
+              <div className="font-bold text-lg">₹{assignedTotal.toFixed(2)}</div>
               <div className="text-xs text-muted-foreground">
                 {assignedItemsCount} item{assignedItemsCount !== 1 ? "s" : ""}
               </div>
@@ -146,7 +146,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
               <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
                 <div className="text-xs text-amber-700 dark:text-amber-300 mb-1">Unassigned Items</div>
                 <div className="font-bold text-lg text-amber-800 dark:text-amber-200">
-                  ${unassignedTotal.toFixed(2)}
+                  ₹{unassignedTotal.toFixed(2)}
                 </div>
                 <div className="text-xs text-amber-700 dark:text-amber-300">
                   {unassignedItemsCount} item{unassignedItemsCount !== 1 ? "s" : ""}
@@ -157,7 +157,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
             {/* All Items Total */}
             <div className="p-3 bg-muted/10 rounded-lg">
               <div className="text-xs text-muted-foreground mb-1">All Items Total</div>
-              <div className="font-bold text-lg">${allItemsTotal.toFixed(2)}</div>
+              <div className="font-bold text-lg">₹{allItemsTotal.toFixed(2)}</div>
               <div className="text-xs text-muted-foreground">
                 {products.length} item{products.length !== 1 ? "s" : ""}
               </div>
@@ -183,7 +183,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
                   assignedMatchesSubtotal ? "text-green-800 dark:text-green-200" : "text-red-800 dark:text-red-200"
                 }`}
               >
-                ${currentSubtotal.toFixed(2)}
+                ₹{currentSubtotal.toFixed(2)}
               </div>
               <div
                 className={`text-xs ${
@@ -201,17 +201,17 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-red-800 dark:text-red-200">Difference Analysis</span>
                 <Badge variant="destructive" className="text-xs">
-                  ${Math.abs(assignedTotal - currentSubtotal).toFixed(2)} off
+                  ₹{Math.abs(assignedTotal - currentSubtotal).toFixed(2)} off
                 </Badge>
               </div>
               <div className="text-xs text-red-700 dark:text-red-300 space-y-1">
                 {assignedTotal > currentSubtotal ? (
                   <p>
-                    • Assigned items total is ${(assignedTotal - currentSubtotal).toFixed(2)} more than receipt subtotal
+                    • Assigned items total is ₹{(assignedTotal - currentSubtotal).toFixed(2)} more than receipt subtotal
                   </p>
                 ) : (
                   <p>
-                    • Assigned items total is ${(currentSubtotal - assignedTotal).toFixed(2)} less than receipt subtotal
+                    • Assigned items total is ₹{(currentSubtotal - assignedTotal).toFixed(2)} less than receipt subtotal
                   </p>
                 )}
                 <p>• Check individual item prices for accuracy</p>
@@ -230,7 +230,7 @@ export function AssignmentSummary({ products, subtotal, onRecalculateSubtotal }:
                 </Badge>
               </div>
               <div className="text-xs text-amber-700 dark:text-amber-300 space-y-1">
-                <p>• ${unassignedTotal.toFixed(2)} worth of items are not assigned to anyone</p>
+                <p>• ₹{unassignedTotal.toFixed(2)} worth of items are not assigned to anyone</p>
                 <p>• Assign these items before creating the expense</p>
                 {allItemsMatchSubtotal && <p>• All items total matches receipt subtotal ✓</p>}
               </div>

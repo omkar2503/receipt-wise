@@ -353,7 +353,7 @@ function ImageUploadSearch() {
   const recalculateSubtotalFromItems = useCallback(() => {
     try {
       const assignedTotal = products.reduce((total, product) => {
-        const price = Number.parseFloat(product.price.replace("$", "")) || 0
+        const price = Number.parseFloat(product.price.replace("₹", "")) || 0
 
         // Only count items that are assigned (have shares)
         if (product.shares.length > 0) {
@@ -729,7 +729,7 @@ function ImageUploadSearch() {
             if (product.id === productId) {
               return {
                 ...product,
-                price: `$${newPrice}`,
+                price: `₹${newPrice}`,
               }
             }
             return product
@@ -747,7 +747,7 @@ function ImageUploadSearch() {
   const recalculateTotals = useCallback(() => {
     try {
       const newSubtotal = products.reduce((sum, product) => {
-        return sum + (Number.parseFloat(product.price.replace("$", "")) || 0)
+        return sum + (Number.parseFloat(product.price.replace("₹", "")) || 0)
       }, 0)
 
       const newTaxAmount = taxInfo ? newSubtotal * taxInfo.rate : 0
@@ -779,8 +779,8 @@ function ImageUploadSearch() {
               // Skip if user is not assigned to this product
               if (!userShare) return total
 
-              // Remove $ and convert to number
-              const price = Number.parseFloat(product.price.replace("$", "")) || 0
+              // Remove ₹ and convert to number
+              const price = Number.parseFloat(product.price.replace("₹", "")) || 0
 
               // Calculate user's portion based on percentage
               const userPortion = price * ((userShare.percentage || 0) / 100)
@@ -807,7 +807,7 @@ function ImageUploadSearch() {
         const totalSubtotal = Number(
           products
             .reduce((sum, product) => {
-              return sum + (Number.parseFloat(product.price.replace("$", "")) || 0)
+              return sum + (Number.parseFloat(product.price.replace("₹", "")) || 0)
             }, 0)
             .toFixed(2),
         )

@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         const receiptProducts = receipt.items.map((item: any, index: number) => ({
           id: `${receiptIndex}_${index}`,
           name: item.name,
-          price: `$${item.cost.toFixed(2)}`,
+          price: `₹${item.cost.toFixed(2)}`,
           image: "/placeholder.svg?height=200&width=200",
         }))
 
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       allProducts = data.receipt_data.items.map((item: any, index: number) => ({
         id: index.toString(),
         name: item.name,
-        price: `$${item.cost.toFixed(2)}`,
+        price: `₹${item.cost.toFixed(2)}`,
         image: "/placeholder.svg?height=200&width=200",
       }))
 

@@ -61,8 +61,8 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
               // Skip if user is not assigned to this product
               if (!userShare) return total
 
-              // Remove $ and convert to number
-              const price = Number.parseFloat(product.price.replace("$", "")) || 0
+              // Remove ₹ and convert to number
+              const price = Number.parseFloat(product.price.replace("₹", "")) || 0
 
               // Calculate user's portion based on percentage
               const userPortion = price * ((userShare.percentage || 0) / 100)
@@ -89,7 +89,7 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
         const totalSubtotal = Number(
           products
             .reduce((sum, product) => {
-              return sum + (Number.parseFloat(product.price.replace("$", "")) || 0)
+              return sum + (Number.parseFloat(product.price.replace("₹", "")) || 0)
             }, 0)
             .toFixed(2),
         )
@@ -153,7 +153,7 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
     try {
       return products
         .filter((p) => p.shares.length === 0)
-        .reduce((total, p) => total + (Number.parseFloat(p.price.replace("$", "")) || 0), 0)
+        .reduce((total, p) => total + (Number.parseFloat(p.price.replace("₹", "")) || 0), 0)
         .toFixed(2)
     } catch (error) {
       console.error("Error calculating unassigned total:", error)
@@ -177,17 +177,17 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
           <div className="flex flex-col space-y-1 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Subtotal:</span>
-              <span className="font-medium">${subtotal || "0.00"}</span>
+              <span className="font-medium">₹{subtotal || "0.00"}</span>
             </div>
 
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tax ({taxInfo ? (taxInfo.rate * 100).toFixed(1) : "0"}%):</span>
-              <span className="font-medium">${taxInfo ? taxInfo.amount : "0.00"}</span>
+              <span className="font-medium">₹{taxInfo ? taxInfo.amount : "0.00"}</span>
             </div>
 
             <div className="flex justify-between pt-1 border-t">
               <span className="text-muted-foreground font-medium">Total:</span>
-              <span className="font-bold">${total || "0.00"}</span>
+              <span className="font-bold">₹{total || "0.00"}</span>
             </div>
 
             {payer && (
@@ -236,13 +236,13 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
                   </div>
 
                   <div className="text-muted-foreground">Subtotal:</div>
-                  <div className="text-right">${subtotalAmount.toFixed(2)}</div>
+                  <div className="text-right">₹{subtotalAmount.toFixed(2)}</div>
 
                   <div className="text-muted-foreground">Tax share:</div>
-                  <div className="text-right">${taxShare.toFixed(2)}</div>
+                  <div className="text-right">₹{taxShare.toFixed(2)}</div>
 
                   <div className="text-muted-foreground font-medium pt-1 border-t">Total:</div>
-                  <div className="text-right font-bold pt-1 border-t">${totalAmount.toFixed(2)}</div>
+                  <div className="text-right font-bold pt-1 border-t">₹{totalAmount.toFixed(2)}</div>
                 </div>
               </div>
             )
@@ -263,7 +263,7 @@ function BillSummaryComponent({ products, users, taxInfo, subtotal, total, payer
                 </div>
 
                 <div>Total:</div>
-                <div className="text-right font-bold">${getUnassignedTotal()}</div>
+                <div className="text-right font-bold">₹{getUnassignedTotal()}</div>
               </div>
               <div className="mt-2 text-xs">These items need to be assigned before creating the expense.</div>
             </div>
